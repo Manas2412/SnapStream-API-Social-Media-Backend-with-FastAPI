@@ -71,7 +71,7 @@ async def upload_file(
 
 
 @app.get("/feed", response_model=List[PostResponse])
-async def get_feed(session: AsyncSession = Depends(get_async_session)):
+async def get_feed(session: AsyncSession = Depends(get_async_session), user: User = Depends(current_active_user)):
     result = await session.execute(select(Post).order_by(Post.created_at.desc()))
     posts = [row[0] for row in result.all()]
 
@@ -93,13 +93,13 @@ async def get_feed(session: AsyncSession = Depends(get_async_session)):
             "email": user_dict.get(post.user_id, "Unknown"),
             "name": user_dict.get(post.user_id, "Unknown")
         })
-    return {"posts": posts_data}
+    return posts_data
     
 
 
 
 @app.delete("/posts/{post_id}")
-async def delete_post(post_id: str, session: AsyncSession = Depends(get_async_session)):
+async def delete_post(post_id: str, session: AsyncSession = Depends(get_async_session), user: User = Depends(current_active_user)):
     try:
         try:
             post_uuid = uuid.UUID(post_id)

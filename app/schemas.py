@@ -16,8 +16,11 @@ class PostResponse(BaseModel):
     url: str
     file_type: str
     file_name: str
-    created_at: datetime
-    user_id: uuid.UUID
+    created_at: str
+    user_id: str
+    is_owner: bool
+    email: str
+    name: str
 
     class Config:
         from_attributes = True
