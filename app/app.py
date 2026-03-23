@@ -91,7 +91,7 @@ async def get_feed(session: AsyncSession = Depends(get_async_session)):
             "created_at": post.created_at.isoformat(),
             "is_owner": post.user_id == user.id,
             "email": user_dict.get(post.user_id, "Unknown"),
-            "name": post.user.name
+            "name": user_dict.get(post.user_id, "Unknown")
         })
     return {"posts": posts_data}
     
